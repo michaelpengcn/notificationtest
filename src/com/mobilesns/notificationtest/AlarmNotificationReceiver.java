@@ -45,9 +45,9 @@ public class AlarmNotificationReceiver extends BroadcastReceiver {
 	            .setTicker(msgBody)
 	            .setContentIntent(contentIntent)  
 	            .setSmallIcon(R.drawable.app_icon)
-	            .setDefaults(Notification.DEFAULT_SOUND)
+	            .setDefaults(Notification.DEFAULT_SOUND) // if mixed with vibrate flag, we need to specify the vibrate permission
 	            //.setSound(Notification.DEFAULT_SOUND, Content)
-	            //.setVibrate(Notification.DEFAULT_VIBRATE)
+	            //.setVibrate()  {0,100,200,300}
 	            //.setOngoing(true); // set true to don`t allow user to dismiss message on message bar 
 	            //.setAutoCancel(true)
 	            .setWhen(System.currentTimeMillis());
