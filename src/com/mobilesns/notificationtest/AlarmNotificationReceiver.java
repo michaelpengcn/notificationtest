@@ -22,9 +22,9 @@ public class AlarmNotificationReceiver extends BroadcastReceiver {
 		}
 	}
 	
-	public static void sendNotify(final int id, final String body, final Context ctx)
+	public static void sendNotify(final int id, final String msgBody, final Context ctx)
 	{
-		Log.v("cpeng", "send notification with msg: " + body);
+		Log.v("cpeng", "send notification with msg: " + msgBody);
 		NotificationManager nm = (NotificationManager) ctx.getSystemService(Context.NOTIFICATION_SERVICE);
 		Intent intent = new Intent(ctx, UnityPlayerActivity.class);
 		intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP| Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -37,15 +37,24 @@ public class AlarmNotificationReceiver extends BroadcastReceiver {
 //		noti.setLatestEventInfo(ctx,title, body, contentIntent);
 	
 		// bigger than API Level 16
+		@SuppressWarnings("deprecation")
 		Notification.Builder builder = new Notification.Builder(ctx)  
 	            .setAutoCancel(true)  
 	            .setContentTitle(getApplicationName(ctx))  
-	            .setContentText(body)  
+	            .setContentText(msgBody) 
+	            .setTicker(msgBody)
 	            .setContentIntent(contentIntent)  
-	            .setSmallIcon(R.drawable.app_icon)  
-	            .setWhen(System.currentTimeMillis())  
-	            .setOngoing(true);  
-		Notification noti =builder.build();  
+	            .setSmallIcon(R.drawable.app_icon)
+	            .setDefaults(Notification.DEFAULT_SOUND)
+	            //.setSound(Notification.DEFAULT_SOUND, Content)
+	            //.setVibrate(Notification.DEFAULT_VIBRATE)
+	            //.setOngoing(true); // set true to don`t allow user to dismiss message on message bar 
+	            //.setAutoCancel(true)
+	            .setWhen(System.currentTimeMillis());
+	            
+	             
+		Notification noti =builder.build();
+		
 		nm.notify(id, noti);
 	}
 	
