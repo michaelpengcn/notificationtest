@@ -44,7 +44,11 @@ public class UnityPlayerActivity extends Activity
 		setContentView(mUnityPlayer);
 		mUnityPlayer.requestFocus();
 		mContext = this;
+		SetupNotificationMessage1 ("test wakeup notifiaction", 11, 14, 0, 100, 1);
 	}
+	
+	public void SetupNotificationMessage1(String message, int hour, int minute, int second, int repeatMode, int id)
+    {}
 	
 	// repeatMode, 0: none, 1: everyday, 2: week
 	public void SetupNotificationMessage(String message, int hour, int minute, int second, int repeatMode, int id)
@@ -61,6 +65,10 @@ public class UnityPlayerActivity extends Activity
 		}
 		else if (repeatMode == 2) {
 			interval = INTERVAL_WEEKLY;
+		}
+		else if (repeatMode == 100) {
+			// this is for test, 30 second repeat
+			interval = INTERVAL;
 		}
 		
 		Log.v("cpeng > ", "SetupNoficationMessage > repeatMode: 1");

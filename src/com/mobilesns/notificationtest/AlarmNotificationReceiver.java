@@ -8,17 +8,21 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
+import android.os.Build;
+import android.os.PowerManager;
+import android.os.PowerManager.WakeLock;
 import android.util.Log;
 
 public class AlarmNotificationReceiver extends BroadcastReceiver {
 
 	@Override
-	public void onReceive(Context context, Intent intent) {
+	public void onReceive(Context ctx, Intent intent) {
 		Log.v("cpeng", "receive a alarm notification");
 		if (intent.getAction().equals(UnityPlayerActivity.PushAction)) {
 			String	msg		= intent.getStringExtra("msg");
 			int		id		= intent.getIntExtra("id", 0); 
-			sendNotify (id, msg, context);
+			wakeUpScreen (ctx);
+			sendNotify (id, msg, ctx);
 		}
 	}
 	
@@ -70,5 +74,31 @@ public class AlarmNotificationReceiver extends BroadcastReceiver {
 	        String applicationName =  
 	        (String) packageManager.getApplicationLabel(applicationInfo); 
 	        return applicationName; 
-	    } 
+	    }
+	 
+	 @SuppressWarnings("deprecation")
+	private static void wakeUpScreen (Context ctx) {
+		 PowerManager pm = (PowerManager)ctx.getSystemService(Context.POWER_SERVICE);
+		 boolean isScreenOn = true;
+		 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT_WATCH) {
+			 isScreenOn = pm.isInteractive();
+		     Log.v("cpeng", "alarm screen is interactive");
+		 }
+		 else if(Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT_WATCH){
+			 isScreenOn = pm.isScreenOn();
+			 Log.v("cpeng", "alarm screen is on");
+		 }
+		 else {
+			 Log.v("cpeng", "alarm screen OFF");
+		 }
+
+         if(isScreenOn==false)
+         {
+        	 WakeLock wl = pm.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK | PowerManager.ACQUIRE_CAUSES_WAKEUP | PowerManager.ON_AFTER_RELEASE,"ALock");
+        	 wl.acquire(10000);
+        	 wl.release();
+//        	 WakeLock wl_cpu = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK,"ACPULock");
+//        	 wl_cpu.acquire(10000);
+         }
+	 }
 }
