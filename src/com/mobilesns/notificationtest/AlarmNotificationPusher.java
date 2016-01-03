@@ -58,6 +58,11 @@ public class AlarmNotificationPusher {
 		calendar.set(Calendar.SECOND, second);
 		calendar.set(Calendar.MILLISECOND, 0);
 
+		// use this on sdk level 18 and smaller than 18. later sdk won`t guarantee time to be precise.
 		am.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), interval, sender);
+		
+		// if target sdk is level 19 or later, use setWindow, and call this again in alarm receiver to inplement repeat
+		// Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT
+		// am.setWindow(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), 20000, sender);
 	}
 }

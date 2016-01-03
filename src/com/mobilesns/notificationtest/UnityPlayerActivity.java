@@ -34,7 +34,7 @@ public class UnityPlayerActivity extends Activity
 		mUnityPlayer = new UnityPlayer(this);
 		setContentView(mUnityPlayer);
 		mUnityPlayer.requestFocus();
-		SetupNotificationMessage1 ("test wakeup notifiaction", 7, 12, 25, 0, 2, 1);
+		//SetupNotificationMessage1 ("test wakeup notifiaction", 7, 13, 06, 0, 2, 1);
 	}
 	
 	// repeatMode, 0: none, 1: everyday, 2: week
