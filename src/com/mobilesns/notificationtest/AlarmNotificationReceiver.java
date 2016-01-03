@@ -18,7 +18,7 @@ public class AlarmNotificationReceiver extends BroadcastReceiver {
 	@Override
 	public void onReceive(Context ctx, Intent intent) {
 		Log.v("cpeng", "receive a alarm notification");
-		if (intent.getAction().equals(UnityPlayerActivity.PushAction)) {
+		if (intent.getAction().equals(AlarmNotificationPusher.PushAction)) {
 			String	msg		= intent.getStringExtra("msg");
 			int		id		= intent.getIntExtra("id", 0); 
 			wakeUpScreen (ctx);

@@ -23,15 +23,6 @@ import android.view.WindowManager;
 public class UnityPlayerActivity extends Activity
 {
 	protected UnityPlayer mUnityPlayer; // don't change the name of this variable; referenced from native code
-	// added by cpeng
-	private static Context mContext = null;
-	private static final int INTERVAL_DAILY		= 1000 * 60 * 60 * 24;// 24h
-	private static final int INTERVAL_WEEKLY	= 1000 * 60 * 60 * 24 * 7; // a week 
-	private static final int INTERVAL			= 1000 * 30;// 30 seconds
-	private static final int REQUEST_CODE		= 10001;
-	public static String PushAction = "AlarmAction";
-	// added end
-	
 	// Setup activity layout
 	@Override protected void onCreate (Bundle savedInstanceState)
 	{
@@ -43,54 +34,17 @@ public class UnityPlayerActivity extends Activity
 		mUnityPlayer = new UnityPlayer(this);
 		setContentView(mUnityPlayer);
 		mUnityPlayer.requestFocus();
-		mContext = this;
-		SetupNotificationMessage1 ("test wakeup notifiaction", 11, 14, 0, 100, 1);
+		//SetupNotificationMessage1 ("test wakeup notifiaction", 11, 14, 0, 100, 1);
 	}
-	
-	public void SetupNotificationMessage1(String message, int hour, int minute, int second, int repeatMode, int id)
-    {}
 	
 	// repeatMode, 0: none, 1: everyday, 2: week
 	public void SetupNotificationMessage(String message, int hour, int minute, int second, int repeatMode, int id)
     {
-		Log.v("cpeng > ", "SetupNoficationMessage");
-		if (repeatMode == 0) {
-			Log.v("cpeng > ", "SetupNoficationMessage > do not support non-repeat mode yet");
-			return;
-		}
-		
-		int interval = INTERVAL_DAILY;
-		if (repeatMode == 1) {
-			interval = INTERVAL_DAILY;
-		}
-		else if (repeatMode == 2) {
-			interval = INTERVAL_WEEKLY;
-		}
-		else if (repeatMode == 100) {
-			// this is for test, 30 second repeat
-			interval = INTERVAL;
-		}
-		
-		Log.v("cpeng > ", "SetupNoficationMessage > repeatMode: 1");
-		Intent intent = new Intent(getApplicationContext(), AlarmNotificationReceiver.class);
-		intent.setAction(PushAction);
-		intent.putExtra("id", id);
-		intent.putExtra("msg", message);
-		PendingIntent sender = PendingIntent.getBroadcast(getApplicationContext(),
-				REQUEST_CODE, intent, PendingIntent.FLAG_CANCEL_CURRENT);
-
-		// Schedule the alarm!
-		AlarmManager am = (AlarmManager) getApplicationContext()
-			.getSystemService(Context.ALARM_SERVICE);
-
-		Calendar calendar = Calendar.getInstance();
-		calendar.set(Calendar.HOUR_OF_DAY, hour);
-		calendar.set(Calendar.MINUTE, minute);
-		calendar.set(Calendar.SECOND, second);
-		calendar.set(Calendar.MILLISECOND, 0);
-
-		am.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
-				interval, sender);
+		AlarmNotificationPusher.SetupNotificationMessage (getApplicationContext(), message, hour, minute, second, repeatMode, id);
+    }
+	
+	public void SetupNotificationMessage2(String message, int hour, int minute, int second, int repeatMode, int id)
+    {
     }
 	
 	public void CancelNotification(int id) {
