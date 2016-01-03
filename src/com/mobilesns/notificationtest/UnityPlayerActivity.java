@@ -34,16 +34,16 @@ public class UnityPlayerActivity extends Activity
 		mUnityPlayer = new UnityPlayer(this);
 		setContentView(mUnityPlayer);
 		mUnityPlayer.requestFocus();
-		//SetupNotificationMessage1 ("test wakeup notifiaction", 11, 14, 0, 100, 1);
+		SetupNotificationMessage1 ("test wakeup notifiaction", 7, 12, 25, 0, 2, 1);
 	}
 	
 	// repeatMode, 0: none, 1: everyday, 2: week
-	public void SetupNotificationMessage(String message, int hour, int minute, int second, int repeatMode, int id)
+	public void SetupNotificationMessage1(String message, int dayOfWeek, int hour, int minute, int second, int repeatMode, int id)
     {
-		AlarmNotificationPusher.SetupNotificationMessage (getApplicationContext(), message, hour, minute, second, repeatMode, id);
+		AlarmNotificationPusher.SetupNotificationMessage (getApplicationContext(), message, dayOfWeek, hour, minute, second, repeatMode, id);
     }
 	
-	public void SetupNotificationMessage2(String message, int hour, int minute, int second, int repeatMode, int id)
+	public void SetupNotificationMessage(String message, int dayOfWeek, int hour, int minute, int second, int repeatMode, int id)
     {
     }
 	
