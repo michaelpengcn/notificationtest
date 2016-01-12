@@ -34,7 +34,7 @@ public class AlarmNotificationReceiver extends BroadcastReceiver {
 			sendNotify (id, msg, ctx);
 			
 			Boolean force = true;
-			if (force || Build.VERSION.SDK_INT >= AlarmNotificationUtil.FAKE_KITKAT_WATCH) {
+			if ((force || Build.VERSION.SDK_INT >= AlarmNotificationUtil.FAKE_KITKAT_WATCH) && (repeatMode == 1 || repeatMode == 2)) {
 				Log.e("cpeng > ", "reset a notification" + msg);
 				int interval = AlarmNotificationUtil.getIntervalForMode(repeatMode);
 				PendingIntent sender = AlarmNotificationUtil.getPendingIntent(ctx, AlarmNotificationPusher.PushAction, 
