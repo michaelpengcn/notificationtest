@@ -1,11 +1,7 @@
 package com.mobilesns.notificationtest;
 
-import java.io.Console;
-import java.util.Calendar;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
 
 import com.unity3d.player.*;
@@ -13,12 +9,9 @@ import android.app.Activity;
 import android.content.res.Configuration;
 import android.graphics.PixelFormat;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
-import android.view.View;
 import android.view.Window;
-import android.view.WindowManager;
 
 public class UnityPlayerActivity extends Activity
 {
@@ -34,7 +27,7 @@ public class UnityPlayerActivity extends Activity
 		mUnityPlayer = new UnityPlayer(this);
 		setContentView(mUnityPlayer);
 		mUnityPlayer.requestFocus();
-		//SetupNotificationMessage1 ("test wakeup notifiaction", 7, 13, 06, 0, 2, 1);
+		SetupNotificationMessage1 ("test wakeup notifiaction", 7, 9, 30, 0, 1, 1);
 	}
 	
 	// repeatMode, 0: none, 1: everyday, 2: week

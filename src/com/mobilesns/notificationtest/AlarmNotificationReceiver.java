@@ -1,5 +1,8 @@
 package com.mobilesns.notificationtest;
 
+import java.util.Calendar;
+
+import android.app.AlarmManager;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -19,10 +22,29 @@ public class AlarmNotificationReceiver extends BroadcastReceiver {
 	public void onReceive(Context ctx, Intent intent) {
 		Log.v("cpeng", "receive a alarm notification");
 		if (intent.getAction().equals(AlarmNotificationPusher.PushAction)) {
+			int		repeatMode	= intent.getIntExtra("repeatMode", 0);
 			String	msg		= intent.getStringExtra("msg");
-			int		id		= intent.getIntExtra("id", 0); 
+			int		id		= intent.getIntExtra("id", 0);
+			int		dayOfWeek	= intent.getIntExtra("dayOfWeek", 7);
+			int		hour	= intent.getIntExtra("hour", 12);
+			int		minute	= intent.getIntExtra("minute", 0);
+			int		second	= intent.getIntExtra("second", 0);
+			
 			wakeUpScreen (ctx);
 			sendNotify (id, msg, ctx);
+			
+			Boolean force = true;
+			if (force || Build.VERSION.SDK_INT >= AlarmNotificationUtil.FAKE_KITKAT_WATCH) {
+				Log.e("cpeng > ", "reset a notification" + msg);
+				int interval = AlarmNotificationUtil.getIntervalForMode(repeatMode);
+				PendingIntent sender = AlarmNotificationUtil.getPendingIntent(ctx, AlarmNotificationPusher.PushAction, 
+						id, repeatMode, msg, dayOfWeek, hour, minute, second);
+				
+				// Schedule the alarm!
+				AlarmManager am = (AlarmManager) ctx.getSystemService(Context.ALARM_SERVICE);
+				Calendar calendar = AlarmNotificationUtil.getCalendarForTime(repeatMode, dayOfWeek, hour, minute, second);
+				AlarmNotificationUtil.setupNotificationMessage(am, calendar, interval, sender);
+			}
 		}
 	}
 	
@@ -41,7 +63,7 @@ public class AlarmNotificationReceiver extends BroadcastReceiver {
 //		noti.setLatestEventInfo(ctx,title, body, contentIntent);
 	
 		// bigger than API Level 16
-		@SuppressWarnings("deprecation")
+		//@SuppressWarnings("deprecation")
 		Notification.Builder builder = new Notification.Builder(ctx)  
 	            .setAutoCancel(true)  
 	            .setContentTitle(getApplicationName(ctx))  
@@ -80,11 +102,12 @@ public class AlarmNotificationReceiver extends BroadcastReceiver {
 	private static void wakeUpScreen (Context ctx) {
 		 PowerManager pm = (PowerManager)ctx.getSystemService(Context.POWER_SERVICE);
 		 boolean isScreenOn = true;
-		 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT_WATCH) {
+		 // greater or equal to api level 20
+		 if (Build.VERSION.SDK_INT > AlarmNotificationUtil.FAKE_KITKAT_WATCH) {
 			 isScreenOn = pm.isInteractive();
 		     Log.v("cpeng", "alarm screen is interactive");
 		 }
-		 else if(Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT_WATCH){
+		 else if (Build.VERSION.SDK_INT <= AlarmNotificationUtil.FAKE_KITKAT_WATCH) {
 			 isScreenOn = pm.isScreenOn();
 			 Log.v("cpeng", "alarm screen is on");
 		 }
